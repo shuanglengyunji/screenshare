@@ -1,6 +1,6 @@
 from flask import Flask, render_template, Response
 from camera import VideoCamera
-import pyscreenshot
+# import pyscreenshot
 import flask
 from PIL import ImageGrab
 from io import BytesIO
@@ -8,24 +8,28 @@ import socket
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
+#--------------------------------------------------------------------------------
 
+# feed from camera
+
+# gen: convert img byte to frame
 def gen(camera):
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-
+# video_feed feed img to internet
 @app.route('/video_feed')
 def video_feed():
     return Response(gen(VideoCamera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+#--------------------------------------------------------------------------------
 
 @app.route('/screen.png')
 def serve_pil_image():
@@ -39,13 +43,13 @@ def serve_pil_image():
 def send_js(path):
     return flask.send_from_directory('js', path)
 
-
 @app.route('/css/<path:path>')
 def send_css(path):
     return flask.send_from_directory('css', path)
 
 
 def get_ip():
+    '''
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         # doesn't even have to be reachable
@@ -55,6 +59,8 @@ def get_ip():
         IP = '127.0.0.1'
     finally:
         s.close()
+        '''
+    IP = '0.0.0.0'
     return IP
 
 
