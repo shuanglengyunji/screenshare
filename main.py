@@ -15,7 +15,6 @@ def index():
 #--------------------------------------------------------------------------------
 
 # feed from camera
-
 # gen: convert img byte to frame
 def gen(camera):
     while True:
@@ -38,7 +37,6 @@ def serve_pil_image():
     img_buffer.seek(0)
     return flask.send_file(img_buffer, mimetype='image/png')
 
-
 @app.route('/js/<path:path>')
 def send_js(path):
     return flask.send_from_directory('js', path)
@@ -47,9 +45,12 @@ def send_js(path):
 def send_css(path):
     return flask.send_from_directory('css', path)
 
+if __name__ == '__main__':
+	app.run('0.0.0.0', debug=False)
 
+'''
+# app.run(host=get_ip(), debug=False)
 def get_ip():
-    '''
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         # doesn't even have to be reachable
@@ -59,10 +60,5 @@ def get_ip():
         IP = '127.0.0.1'
     finally:
         s.close()
-        '''
-    IP = '0.0.0.0'
     return IP
-
-
-if __name__ == '__main__':
-    app.run(host=get_ip(), debug=False)
+'''
