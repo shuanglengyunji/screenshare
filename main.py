@@ -5,6 +5,10 @@ import flask
 from PIL import ImageGrab
 from io import BytesIO
 import socket
+import logging
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
