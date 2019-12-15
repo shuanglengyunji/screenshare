@@ -6,14 +6,16 @@ from PIL import Image
 from io import BytesIO
 import socket
 import win32gui
-import logging
+from flask_ngrok import run_with_ngrok
+#import logging
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+#log = logging.getLogger('werkzeug')
+#log.setLevel(logging.ERROR)
 
 imCursor = Image.open('cursor.png')
 
 app = Flask(__name__)
+run_with_ngrok(app)  # Start ngrok when app is run
 
 @app.route('/')
 def index():
@@ -41,7 +43,7 @@ def serve_pil_image():
     imScreen.paste(imCursor,box=(curX,curY),mask=imCursor)
     # Save to BytesIO
     img_buffer = BytesIO()
-    imScreen.save(img_buffer,'PNG',quality=10)
+    imScreen.save(img_buffer,'JPEG',quality=30)
     img_buffer.seek(0)
     return flask.send_file(img_buffer, mimetype='image/png')
 
@@ -54,7 +56,8 @@ def send_css(path):
     return flask.send_from_directory('css', path)
 
 if __name__ == '__main__':
-	app.run('0.0.0.0', debug=False)
+	#app.run('0.0.0.0', debug=False)
+    app.run()
 
 '''
 ImageGrab.grab().save(img_buffer, 'PNG', quality=10)
